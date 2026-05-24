@@ -1,0 +1,12 @@
+{
+  "accounts": [
+    {
+      "name": "账号1",
+      "qq": "",
+      "priority": 1,
+      "run_duration": 30
+    }
+  ],
+  "auto_switch": false,
+  "switch_interval": 30
+}

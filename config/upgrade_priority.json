@@ -1,0 +1,12 @@
+{
+  "priority": [
+    { "type": "townhall", "name": "大本营", "enabled": true },
+    { "type": "goldmine", "name": "金矿", "enabled": true },
+    { "type": "elixircollector", "name": "圣水收集器", "enabled": true },
+    { "type": "darkdrill", "name": "黑暗圣水钻井", "enabled": true },
+    { "type": "storage", "name": "储存器", "enabled": true },
+    { "type": "wall", "name": "城墙", "enabled": true },
+    { "type": "defense", "name": "防御建筑", "enabled": false },
+    { "type": "other", "name": "其他", "enabled": false }
+  ]
+}

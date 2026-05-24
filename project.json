@@ -1,0 +1,17 @@
+{
+  "name": "coc-auto",
+  "version": "1.0.0",
+  "description": "部落冲突自动工具",
+  "main": "main.js",
+  "author": "coc-auto",
+  "ignore": [
+    "build",
+    ".git",
+    ".idea",
+    "logs/*.log"
+  ],
+  "launchConfig": {
+    "hideLogs": true,
+    "stableMode": true
+  }
+}

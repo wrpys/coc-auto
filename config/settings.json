@@ -1,0 +1,24 @@
+{
+  "schedule": {
+    "start_time": "08:00",
+    "end_time": "23:00"
+  },
+  "raid": {
+    "gold_min": 100000,
+    "elixir_min": 100000,
+    "dark_min": 500,
+    "attack_strategy": "standard"
+  },
+  "donate": {
+    "enabled": true,
+    "troops": ["barbarian", "archer"],
+    "max_count": 5,
+    "check_interval": 10
+  },
+  "delay": {
+    "click_min": 500,
+    "click_max": 1500,
+    "action_min": 1000,
+    "action_max": 3000
+  }
+}
