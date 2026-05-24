@@ -5,13 +5,16 @@
 // 保存 Auto.js 内置函数引用 (避免被同名函数覆盖)
 const _nativeSwipe = typeof swipe !== 'undefined' ? swipe : null;
 
+// 截图权限请求标志 (只请求一次)
+let _screenCaptureRequested = false;
+
 // 配置加载
 let settings = null;
 
 function loadSettings() {
     if (!settings) {
         try {
-            settings = JSON.parse(files.read("./config/settings.json"));
+            settings = JSON.parse(files.read(files.path("./config/settings.json")));
         } catch (e) {
             console.error("加载配置失败:", e);
             settings = getDefaultSettings();
@@ -49,7 +52,7 @@ function actionDelay() {
 // 点击操作
 function click(x, y) {
     clickDelay();
-    press(x, y, 1);
+    press(x, y, 50);  // 50ms minimum duration for reliable click detection
     console.log("点击坐标:", x, y);
 }
 
@@ -87,7 +90,9 @@ function waitForColor(x, y, targetColor, timeout) {
     timeout = timeout || 10000;
     let startTime = Date.now();
     while (Date.now() - startTime < timeout) {
-        let color = images.pixel(captureScreen(), x, y);
+        let img = captureScreen();
+        let color = images.pixel(img, x, y);
+        img.recycle();  // Release captured image to prevent memory leak
         if (colors.equals(color, targetColor)) {
             return true;
         }
@@ -103,9 +108,13 @@ function wait(ms) {
 
 // 截图
 function takeScreenshot() {
-    if (!requestScreenCapture()) {
-        console.error("请求截图权限失败");
-        return null;
+    // Only request permission once per script execution
+    if (!_screenCaptureRequested) {
+        if (!requestScreenCapture()) {
+            console.error("请求截图权限失败");
+            return null;
+        }
+        _screenCaptureRequested = true;
     }
     return captureScreen();
 }
@@ -127,7 +136,8 @@ function log(message) {
     console.log(logMessage);
 
     // 写入日志文件
-    let logFile = "./logs/" + formatDate(new Date()) + ".log";
+    let logFile = files.path("./logs/" + formatDate(new Date()) + ".log");
+    files.createWithDirs(logFile);
     files.append(logFile, logMessage + "\n");
 }
 
