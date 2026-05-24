@@ -29,6 +29,20 @@ let editingIndex = -1;
  * @param {function} cb - 回调函数
  */
 function show(config, cb) {
+    // Validate config and provide defaults if missing
+    if (!config) {
+        config = {};
+    }
+    if (!config.accounts || !Array.isArray(config.accounts)) {
+        config.accounts = [];
+    }
+    if (config.auto_switch === undefined || config.auto_switch === null) {
+        config.auto_switch = false;
+    }
+    if (!config.switch_interval) {
+        config.switch_interval = 30;
+    }
+
     accountsConfig = config;
     callback = cb;
 
@@ -155,6 +169,11 @@ ui.accountListView.on("item_bind", function(itemView, itemHolder) {
 
     itemView.btnDelete.click(function() {
         let position = parseInt(this.tag);
+        // Bounds validation before accessing array
+        if (position < 0 || position >= accountsConfig.accounts.length) {
+            toast("无效的账号索引");
+            return;
+        }
         dialogs.confirm("确认删除", "是否删除账号: " + accountsConfig.accounts[position].name + "?")
             .then(function(confirm) {
                 if (confirm) {
@@ -173,8 +192,16 @@ ui.btnAdd.click(function() {
 
 // 保存按钮
 ui.btnSave.click(function() {
+    let name = ui.inputName.text().trim();
+
+    // Input validation: name must not be empty
+    if (!name) {
+        toast("账号名称不能为空");
+        return;
+    }
+
     let newAccount = {
-        name: ui.inputName.text(),
+        name: name,
         qq: ui.inputQQ.text(),
         priority: parseInt(ui.inputPriority.text()) || 1,
         run_duration: parseInt(ui.inputDuration.text()) || 30
