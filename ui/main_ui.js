@@ -77,7 +77,7 @@ ui.layout(
 
 // 按钮事件
 ui.btnStart.click(function() {
-    if (!runningState.isRunning) {
+    if (!runningState.isRunning || runningState.status === "已暂停") {
         runningState.isRunning = true;
         runningState.status = "运行中";
         ui.btnStart.setText("运行中");
@@ -86,7 +86,7 @@ ui.btnStart.click(function() {
         common.log("开始运行");
 
         // 启动悬浮窗
-        let floaty_ui = require("./ui/floaty_ui.js");
+        let floaty_ui = require("./floaty_ui.js");
         floaty_ui.init(runningState, featureToggles);
 
         // TODO: 启动主循环 (Phase 2实现)
@@ -110,7 +110,7 @@ ui.btnStop.click(function() {
         common.log("停止运行");
 
         // 关闭悬浮窗
-        let floaty_ui = require("./ui/floaty_ui.js");
+        let floaty_ui = require("./floaty_ui.js");
         floaty_ui.close();
     }
 });
@@ -138,7 +138,7 @@ ui.chkAutoDonate.on("check", function(checked) {
 
 // 子界面按钮
 ui.btnAccount.click(function() {
-    let account_ui = require("./ui/account_ui.js");
+    let account_ui = require("./account_ui.js");
     account_ui.show(accountsConfig, function(updated) {
         accountsConfig = updated;
         files.write(files.path("./config/accounts.json"), JSON.stringify(accountsConfig, null, 2));
@@ -150,7 +150,7 @@ ui.btnAccount.click(function() {
 });
 
 ui.btnUpgrade.click(function() {
-    let upgrade_ui = require("./ui/upgrade_ui.js");
+    let upgrade_ui = require("./upgrade_ui.js");
     upgrade_ui.show(upgradeConfig, function(updated) {
         upgradeConfig = updated;
         files.write(files.path("./config/upgrade_priority.json"), JSON.stringify(upgradeConfig, null, 2));
@@ -158,7 +158,7 @@ ui.btnUpgrade.click(function() {
 });
 
 ui.btnSettings.click(function() {
-    let settings_ui = require("./ui/settings_ui.js");
+    let settings_ui = require("./settings_ui.js");
     settings_ui.show(common.loadSettings(), function(updated) {
         // 保存更新后的设置
         files.write(files.path("./config/settings.json"), JSON.stringify(updated, null, 2));
